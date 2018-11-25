@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import {Typography, Paper} from '@material-ui/core';
+import Button from "@material-ui/core/es/Button/Button";
+import {Link} from "react-router-dom";
 
-class Home extends Component {
+export default class TaskList extends Component {
   constructor(props) {
     super(props);
 
@@ -30,6 +32,7 @@ class Home extends Component {
           variant="h4">
           Task list
         </Typography>
+
         {data.length ?
           <div className='tasks'>
             {data.map(data => {
@@ -49,11 +52,25 @@ class Home extends Component {
                 </Paper>
               );
             })}
+
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+                marginRight: '1rem'
+              }}>
+              <Button
+                component={Link}
+                to='/add-task'
+                variant="contained">
+                Add task
+              </Button>
+            </div>
           </div> :
           <Paper style={{margin: '1rem', padding: '1rem'}}>
             <Typography
               style={{margin: '2rem'}}
-              variant="subtitle1">
+              variant="h3">
               No List Items Found
             </Typography>
           </Paper>
@@ -62,5 +79,3 @@ class Home extends Component {
     );
   }
 }
-
-export default Home;

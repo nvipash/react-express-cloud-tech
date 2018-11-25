@@ -7,23 +7,29 @@ const app = express(),
   connection = require('express-myconnection');
 
 // Serve the static files from the React app
-app.use(express.static(path.join(__dirname, 'react-app-for-express/build')));
+app.use(express.static(path.join(__dirname, 'react-app-cloudtech/public')));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(connection(mysql, {
   host: '127.0.0.1',
   port: '3306',
-  //socketPath: 'cloudtech-3course-website:us-central1:cloudtech-3course-website',
+  //socketPath: '/cloudsql/cloudtech-3course-website:us-central1:cloudtech-3course-website',
   user: 'root',
   password: '0000',
   database: 'team_tasks'
 }));
 
+app.use((request, response, next) => {
+  response.header("Access-Control-Allow-Origin", "*");
+  response.header("Access-Control-Allow-Headers", "Content-Type");
+  next();
+});
+
 // An api endpoint that returns a short list of items
-app.get('/api/tasks', (req, res) => {
-  req.getConnection((err, connection) => {
-    if (err) throw err;
-    connection.query('SELECT * FROM team_tasks.tasks', function (err, data) {
-      res.json(data.map(data => {
+app.get('/api/tasks', (request, response) => {
+  request.getConnection((error, connection) => {
+    if (error) throw error;
+    connection.query('SELECT * FROM team_tasks.tasks', (error, data) => {
+      response.json(data.map(data => {
         return (
           {
             id: data.id,
@@ -37,12 +43,37 @@ app.get('/api/tasks', (req, res) => {
   });
 });
 
-// Handles any requests that don't match the ones above
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname + '/react-app-for-express/build/index.html'));
+app.post('/api/tasks/add', (request, response) => {
+  let data = {
+    id: request.body.id,
+    task: request.body.task,
+    status: request.body.status
+  };
+
+  request.getConnection((error, connection) => {
+    if (error) throw error;
+    connection.query('INSERT INTO team_tasks.tasks SET ?', [data], (error, response, results) => {
+      // response.send(JSON.stringify(results));
+      console.log(results);
+      console.log(data);
+      console.log('-------------')
+      }
+    )
+  })
 });
 
-const port = process.env.PORT || 8080;
-app.listen(port);
+// Handles any requests that don't match the ones above
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname + '/react-app-cloudtech/public/index.html'));
+});
 
-console.log('App is listening on port ' + port);
+if (module === require.main) {
+  // Start the server
+  const server = app.listen(process.env.PORT || 8080, () => {
+    const port = server.address().port;
+    console.log(`App listening on port ${port}`);
+  });
+  // [END server]
+}
+
+module.exports = app;
