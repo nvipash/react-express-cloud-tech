@@ -18,7 +18,7 @@ export default class TaskList extends Component {
 
   getList = () => {
     fetch('/api/tasks')
-      .then(res => res.json())
+      .then(response => response.json())
       .then(data => this.setState({data}))
   };
 
@@ -37,7 +37,12 @@ export default class TaskList extends Component {
           <div className='tasks'>
             {data.map(data => {
               return (
-                <Paper style={{margin: '1rem', padding: '1rem'}}>
+                <Paper
+                  key={data.id}
+                  style={{
+                    margin: '1rem',
+                    padding: '1rem'
+                  }}>
                   <Typography>
                     <b>Id:</b> {data.id}
                   </Typography>
@@ -67,7 +72,11 @@ export default class TaskList extends Component {
               </Button>
             </div>
           </div> :
-          <Paper style={{margin: '1rem', padding: '1rem'}}>
+          <Paper
+            style={{
+              margin: '1rem',
+              padding: '1rem'
+            }}>
             <Typography
               style={{margin: '2rem'}}
               variant="h3">

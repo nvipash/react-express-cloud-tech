@@ -12,13 +12,13 @@ const TEAM_TASKS_FIELDS = {
   ID: 'id',
   TASK: 'task',
   STATUS: 'status',
-  // CREATED_AT: 'createdat'
+  CREATED_AT: 'createdat'
 };
 
 const mapPropsToValues = () => ({
-  [TEAM_TASKS_FIELDS.ID]: '6',
-  [TEAM_TASKS_FIELDS.TASK]: 'Create account',
-  [TEAM_TASKS_FIELDS.STATUS]: '1',
+  [TEAM_TASKS_FIELDS.ID]: '',
+  [TEAM_TASKS_FIELDS.TASK]: '',
+  [TEAM_TASKS_FIELDS.STATUS]: '',
   [TEAM_TASKS_FIELDS.CREATED_AT]: ''
 });
 
@@ -26,31 +26,31 @@ const validationSchema = yup.object().shape({
   [TEAM_TASKS_FIELDS.ID]: yup.string().required('Place number ID'),
   [TEAM_TASKS_FIELDS.TASK]: yup.string().required('Insert task'),
   [TEAM_TASKS_FIELDS.STATUS]: yup.string().required('Insert status number'),
-  [TEAM_TASKS_FIELDS.CREATED_AT]: yup.string().notRequired()
-    // .required('Place date and time')
+  [TEAM_TASKS_FIELDS.CREATED_AT]: yup.string().required('Place date and time')
 });
 
 const handleSubmit = values => {
   console.log(values);
-  fetch("/api/tasks/add", {
+  fetch("http://localhost:8080/api/tasks/add", {
     method: 'POST',
+    mode: "cors",
+    cache: "no-cache",
+    credentials: "same-origin",
     headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json; charset=utf-8'
     },
+    redirect: 'manual',
     body: JSON.stringify(values)
   }).then(response => {
     if (response.status >= 400) {
       throw new Error("Bad response from server");
     }
     return response.json();
-  }).then(values => {
-    if (values === "success") {
-      console.log("Thanks for registering");
+  }).then(data => {
+    if (data === "success") {
+      console.log("Task added" + data);
     }
-  }).catch(error =>{
-    console.log(error);
-  });
+  }).catch(err => console.log(err))
 };
 
 class AddTask extends Component {
