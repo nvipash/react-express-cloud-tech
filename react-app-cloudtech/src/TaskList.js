@@ -13,10 +13,10 @@ export default class TaskList extends Component {
   }
 
   componentDidMount() {
-    this.getList();
+    this.showTaskList();
   }
 
-  getList = () => {
+  showTaskList = () => {
     fetch('/api/tasks')
       .then(response => response.json())
       .then(data => this.setState({data}))
@@ -26,7 +26,9 @@ export default class TaskList extends Component {
     const {data} = this.state;
 
     return (
-      <div className="App">
+      <div style={{
+        margin: '6rem 3rem 3rem'
+      }}>
         <Typography
           style={{margin: '2rem'}}
           variant="h4">

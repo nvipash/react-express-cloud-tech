@@ -1,11 +1,14 @@
-import React, {Component} from 'react';
+import React from 'react';
 import * as yup from 'yup';
 import {withFormik} from "formik";
+import {Link} from 'react-router-dom';
+import ArrowBack from '@material-ui/icons/ArrowBack';
 import {
   Button,
   Typography,
   TextField,
-  Paper
+  Paper,
+  IconButton,
 } from '@material-ui/core';
 
 const TEAM_TASKS_FIELDS = {
@@ -18,7 +21,7 @@ const TEAM_TASKS_FIELDS = {
 const mapPropsToValues = () => ({
   [TEAM_TASKS_FIELDS.ID]: '',
   [TEAM_TASKS_FIELDS.TASK]: '',
-  [TEAM_TASKS_FIELDS.STATUS]: '',
+  [TEAM_TASKS_FIELDS.STATUS]: 1,
   [TEAM_TASKS_FIELDS.CREATED_AT]: ''
 });
 
@@ -45,6 +48,7 @@ const handleSubmit = values => {
     if (response.status >= 400) {
       throw new Error("Bad response from server");
     }
+    this.props.history.push('/');
     return response.json();
   }).then(data => {
     if (data === "success") {
@@ -53,26 +57,42 @@ const handleSubmit = values => {
   }).catch(err => console.log(err))
 };
 
-class AddTask extends Component {
+class AddTask extends React.Component {
 
   render() {
     const {values, touched, errors, handleChange, handleSubmit} = this.props;
 
     return (
-      <div className="App">
-        <Typography
-          style={{margin: '2rem'}}
-          variant="h4">
-          Add task
-        </Typography>
+      <div style={{
+        margin: '6rem 3rem 3rem'
+      }}>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'row',
+          margin: '3rem 1rem 1rem',
+          alignItems: 'center'
+        }}>
+          <IconButton
+            component={Link}
+            to='/'>
+            <ArrowBack/>
+          </IconButton>
+
+          <Typography
+            style={{marginLeft: '.5rem'}}
+            variant="h4">
+            Add task
+          </Typography>
+        </div>
 
         <Paper
           style={{
             margin: '1rem',
             display: 'flex',
-            flexDirection: 'column ',
+            flexDirection: 'column',
             padding: '1rem'
           }}>
+
           <TextField
             label='ID'
             type='number'

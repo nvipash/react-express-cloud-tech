@@ -1,26 +1,82 @@
-import './App.css';
+import React from 'react';
+import {
+  Route,
+  Switch
+} from 'react-router-dom';
+import {
+  AppBar,
+  Button,
+  Toolbar,
+  Typography
+} from "@material-ui/core";
 
-import React, {Component} from 'react';
-import {Route, Switch} from 'react-router-dom';
-
+import LoginDialog from "./LoginDialog";
 import TaskList from './TaskList';
 import AddTask from './AddTask';
 
-class App extends Component {
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      open: false
+    }
+  }
+
+  handleDialog = () => {
+    console.log(this.state.open);
+    this.setState({open: !this.state.open});
+  };
+
+  renderAppBar() {
+    return (<div>
+      <AppBar
+        position="fixed"
+        color="default">
+        <Toolbar>
+          <Typography
+            style={{flexGrow: 1}}
+            variant="h6"
+            color="inherit">
+            Cloud Technologies Labs
+          </Typography>
+
+          <Button
+            color="inherit"
+            onClick={this.handleDialog}>
+            Login
+          </Button>
+        </Toolbar>
+      </AppBar>
+
+      <LoginDialog
+        open={this.state.open}
+        onClose={this.handleDialog}/>
+    </div>);
+  };
+
+  renderRoutes = () => {
+    return (
+      <Switch>
+        <Route exact path='/' component={TaskList}/>
+        <Route path='/add-task' component={AddTask}/>
+      </Switch>);
+  };
+
   render() {
-    const App = () => (
+    return (
       <div>
-        <Switch>
-          <Route exact path='/' component={TaskList}/>
-          <Route path='/add-task' component={AddTask}/>
+        {this.renderAppBar()}
+        <Switch style={{
+          background: 'whitesmoke',
+          display: 'flex',
+          justifyContent: 'center',
+          flexDirection: 'column',
+          alignItems: 'center'
+        }}>
+          {this.renderRoutes()}
         </Switch>
       </div>
-    );
-
-    return (
-      <Switch className='app-container'>
-        <App/>
-      </Switch>
     );
   }
 }
