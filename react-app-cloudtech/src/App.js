@@ -24,7 +24,6 @@ class App extends React.Component {
   }
 
   handleDialog = () => {
-    console.log(this.state.open);
     this.setState({open: !this.state.open});
   };
 

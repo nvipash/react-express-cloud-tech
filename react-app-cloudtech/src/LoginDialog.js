@@ -1,12 +1,15 @@
 import React from 'react';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from "@material-ui/core/es/DialogContent/DialogContent";
-import {TextField} from "@material-ui/core";
 import * as yup from "yup";
 import {withFormik} from "formik";
-import DialogActions from "@material-ui/core/es/DialogActions/DialogActions";
-import Button from "@material-ui/core/Button/Button";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogTitle,
+  DialogContent,
+  TextField,
+  Typography
+} from "@material-ui/core";
 
 const USER_DATA = {
   EMAIL: 'email',
@@ -18,12 +21,60 @@ const mapPropsToValues = () => ({
   [USER_DATA.PASSWORD]: ''
 });
 
+let status = '';
+
 const validationSchema = yup.object().shape({
   [USER_DATA.EMAIL]: yup.string().email('Input valid email').required('Write email'),
   [USER_DATA.PASSWORD]: yup.string().required('Write password')
 });
 
-const handleSubmit = values => console.log(values);
+const handleSubmit = values => {
+  fetch("http://localhost:8080/api/users/login", {
+    method: 'POST',
+    mode: "cors",
+    cache: "no-cache",
+    credentials: "same-origin",
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8'
+    },
+    redirect: 'manual',
+    body: JSON.stringify(values)
+  }).then(response => {
+    if (response.status >= 400) {
+      throw new Error("Bad response from server");
+    }
+    status = response.status;
+    return response.json();
+  }).catch(error => console.log(error))
+};
+
+const registerUser = values => {
+  fetch("http://localhost:8080/api/users/register", {
+    method: 'POST',
+    mode: "cors",
+    cache: "no-cache",
+    credentials: "same-origin",
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8'
+    },
+    redirect: 'manual',
+    body: JSON.stringify(values)
+  }).then(response => {
+    if (response.status >= 400) {
+      throw new Error("Bad response from server");
+    }
+    status = response.status;
+    return response.json();
+  }).catch(error => console.log(error))
+};
+
+const showLog = () => {
+  if (status === 200) {
+    return (<Typography variant='subtitle1'>You are logged. Status {status} </Typography>);
+  }
+
+  return (<Typography variant='subtitle1'>You must log in. </Typography>);
+};
 
 const LoginDialog = ({open, onClose, values, touched, errors, handleChange, handleSubmit}) => (
   <Dialog
@@ -62,6 +113,8 @@ const LoginDialog = ({open, onClose, values, touched, errors, handleChange, hand
         InputLabelProps={{
           shrink: true
         }}/>
+      {console.log(status)}
+      {showLog()}
 
     </DialogContent>
     <DialogActions>
@@ -71,8 +124,16 @@ const LoginDialog = ({open, onClose, values, touched, errors, handleChange, hand
         Close
       </Button>
 
-      <Button onClick={handleSubmit} color="inherit">
-        Confirm
+      <Button
+        onClick={handleSubmit}
+        color="inherit">
+        Sign In
+      </Button>
+
+      <Button
+        onClick={registerUser(values)}
+        color="inherit">
+        Sign Up
       </Button>
     </DialogActions>
   </Dialog>

@@ -48,13 +48,12 @@ const handleSubmit = values => {
     if (response.status >= 400) {
       throw new Error("Bad response from server");
     }
-    this.props.history.push('/');
     return response.json();
   }).then(data => {
     if (data === "success") {
       console.log("Task added" + data);
     }
-  }).catch(err => console.log(err))
+  }).catch(error => console.log(error))
 };
 
 class AddTask extends React.Component {

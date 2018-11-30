@@ -38,9 +38,26 @@ app.get('/api/tasks', (request, response) => {
   });
 });
 
+app.get('/api/users', (request, response) => {
+  request.getConnection((error, connection) => {
+    if (error) throw error;
+    connection.query('SELECT * FROM team_tasks.users', (error, data) => {
+      response.json(data.map(data => {
+        return (
+          {
+            id: data.id,
+            email: data.email
+          }
+        );
+      }));
+    });
+  });
+});
+
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname + '/react-app-cloudtech/public/index.html'));
 });
+
 
 app.post('/api/tasks/add', (request, response) => {
   let data = {
@@ -57,6 +74,37 @@ app.post('/api/tasks/add', (request, response) => {
       }
     )
   })
+});
+
+app.post('/api/users/register', (request, response) => {
+  let email = request.body.email;
+  let password = request.body.password;
+  let queryInsertion = `INSERT INTO team_tasks.users (email, password)
+       SELECT * FROM (SELECT '${email}', '${password}') AS tmp
+       WHERE NOT EXISTS (SELECT email FROM team_tasks.users
+       WHERE email = '${email}') LIMIT 1;`;
+
+  request.getConnection((error, connection) => {
+    if (error) throw error;
+    connection.query(queryInsertion, results => response.send(JSON.stringify(results)));
+  });
+});
+
+app.post('/api/users/login', (request, response) => {
+  let email = request.body.email;
+
+  request.getConnection((error, connection) => {
+    if (error) throw error;
+    connection.query(`SELECT * FROM team_tasks.users WhERE email = '${email}'`, (error, data) => {
+      if (data === undefined || data.length === 0) {
+        response.sendStatus(404);
+        console.log('RESPONSE PASS : ' + response.statusCode);
+      } else {
+        response.sendStatus(200);
+        console.log('RESPONSE FAILED: ' + response.statusCode);
+      }
+    });
+  });
 });
 
 app.listen(port, () => console.log(`App listening on port ${port}`));
