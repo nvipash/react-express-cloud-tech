@@ -113,7 +113,7 @@ const LoginDialog = ({open, onClose, values, touched, errors, handleChange, hand
         InputLabelProps={{
           shrink: true
         }}/>
-      {console.log(status)}
+
       {showLog()}
 
     </DialogContent>
@@ -131,7 +131,7 @@ const LoginDialog = ({open, onClose, values, touched, errors, handleChange, hand
       </Button>
 
       <Button
-        onClick={registerUser(values)}
+        onClick={() => registerUser(values)}
         color="inherit">
         Sign Up
       </Button>

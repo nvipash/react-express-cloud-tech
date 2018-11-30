@@ -98,10 +98,10 @@ app.post('/api/users/login', (request, response) => {
     connection.query(`SELECT * FROM team_tasks.users WhERE email = '${email}'`, (error, data) => {
       if (data === undefined || data.length === 0) {
         response.sendStatus(404);
-        console.log('RESPONSE PASS : ' + response.statusCode);
+        console.log('RESPONSE FAILED : ' + response.statusCode);
       } else {
         response.sendStatus(200);
-        console.log('RESPONSE FAILED: ' + response.statusCode);
+        console.log('RESPONSE PASSED: ' + response.statusCode);
       }
     });
   });
