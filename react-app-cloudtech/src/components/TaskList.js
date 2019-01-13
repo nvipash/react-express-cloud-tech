@@ -37,8 +37,7 @@ export default class TaskList extends Component {
 
         {data.length ?
           <div className='tasks'>
-            {data.map(data => {
-              return (
+            {data.map(data =>
                 <Paper
                   key={data.id}
                   style={{
@@ -57,8 +56,7 @@ export default class TaskList extends Component {
                     <b>Create at:</b> {data.createdat}
                   </Typography>
                 </Paper>
-              );
-            })}
+            )}
 
             <div
               style={{
@@ -80,7 +78,9 @@ export default class TaskList extends Component {
               padding: '1rem'
             }}>
             <Typography
-              style={{margin: '2rem'}}
+              style={{
+                margin: '2rem'
+              }}
               variant="h3">
               No List Items Found
             </Typography>

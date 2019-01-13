@@ -1,24 +1,25 @@
-const express = require('express');
-const path = require('path');
+import express from 'express';
+import connection from 'express-myconnection';
+import mysql from 'mysql';
+import path from 'path';
+import cors from 'cors';
 
-const app = express(),
-  mysql = require('mysql'),
-  connection = require('express-myconnection'),
-  cors = require('cors'),
-  port = parseInt(process.env.PORT, 10) || 8080;
+const app = express();
+const port = parseInt(process.env.PORT, 10) || 8080;
 
 // Serve the static files from the React app
 app.use(express.static(path.join(__dirname, 'react-app-cloudtech/public')));
 app.use(cors());
 app.use(express.json());
 app.use(connection(mysql, {
-  host: '127.0.0.1',
-  port: '3306',
-  //socketPath: '/cloudsql/cloudtech-3course-website:us-central1:cloudtech-3course-website',
-  user: 'root',
-  password: '0000',
-  database: 'team_tasks'
-}));
+    host: '127.0.0.1',
+    port: '3306',
+    //socketPath: '/cloudsql/cloudtech-3course-website:us-central1:cloudtech-3course-website',
+    user: 'root',
+    password: '0000',
+    database: 'team_tasks'
+  })
+);
 
 app.get('/api/tasks', (request, response) => {
   request.getConnection((error, connection) => {
@@ -57,7 +58,6 @@ app.get('/api/users', (request, response) => {
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname + '/react-app-cloudtech/public/index.html'));
 });
-
 
 app.post('/api/tasks/add', (request, response) => {
   let data = {
@@ -101,7 +101,7 @@ app.post('/api/users/login', (request, response) => {
         console.log('RESPONSE FAILED : ' + response.statusCode);
       } else {
         response.sendStatus(200);
-        console.log('RESPONSE PASSED: ' + response.statusCode);
+        console.log('RESPONSE PASSED : ' + response.statusCode);
       }
     });
   });

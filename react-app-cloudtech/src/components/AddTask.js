@@ -62,15 +62,19 @@ class AddTask extends React.Component {
     const {values, touched, errors, handleChange, handleSubmit} = this.props;
 
     return (
-      <div style={{
-        margin: '6rem 3rem 3rem'
-      }}>
-        <div style={{
-          display: 'flex',
-          flexDirection: 'row',
-          margin: '3rem 1rem 1rem',
-          alignItems: 'center'
+      <div
+        style={{
+          margin: '6rem 3rem 3rem'
         }}>
+
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            margin: '3rem 1rem 1rem',
+            alignItems: 'center'
+          }}>
+
           <IconButton
             component={Link}
             to='/'>
@@ -104,7 +108,8 @@ class AddTask extends React.Component {
             error={touched[TEAM_TASKS_FIELDS.ID] && !!errors[TEAM_TASKS_FIELDS.ID]}
             InputLabelProps={{
               shrink: true
-            }}/>
+            }}
+          />
 
           <TextField
             label='Task'
@@ -117,7 +122,8 @@ class AddTask extends React.Component {
             error={touched[TEAM_TASKS_FIELDS.TASK] && !!errors[TEAM_TASKS_FIELDS.TASK]}
             InputLabelProps={{
               shrink: true
-            }}/>
+            }}
+          />
 
           <TextField
             label='Status'
@@ -132,7 +138,8 @@ class AddTask extends React.Component {
             error={touched[TEAM_TASKS_FIELDS.STATUS] && !!errors[TEAM_TASKS_FIELDS.STATUS]}
             InputLabelProps={{
               shrink: true
-            }}/>
+            }}
+          />
 
           <TextField
             label='Created at'
@@ -147,7 +154,8 @@ class AddTask extends React.Component {
             error={touched[TEAM_TASKS_FIELDS.CREATED_AT] && !!errors[TEAM_TASKS_FIELDS.CREATED_AT]}
             InputLabelProps={{
               shrink: true
-            }}/>
+            }}
+          />
         </Paper>
 
         <div
@@ -156,11 +164,13 @@ class AddTask extends React.Component {
             justifyContent: 'flex-end',
             marginRight: '1rem'
           }}>
+
           <Button
             onClick={handleSubmit}
             variant='contained'>
             Submit
           </Button>
+
         </div>
       </div>
     );

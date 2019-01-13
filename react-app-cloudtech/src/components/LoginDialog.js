@@ -70,10 +70,19 @@ const registerUser = values => {
 
 const showLog = () => {
   if (status === 200) {
-    return (<Typography variant='subtitle1'>You are logged. Status {status} </Typography>);
+    return (
+      <Typography
+        variant='subtitle1'>
+        You are logged
+      </Typography>
+    );
   }
 
-  return (<Typography variant='subtitle1'>You must log in. </Typography>);
+  return (
+    <Typography
+      variant='subtitle1'>
+      You must log in.
+    </Typography>);
 };
 
 const LoginDialog = ({open, onClose, values, touched, errors, handleChange, handleSubmit}) => (
@@ -98,7 +107,8 @@ const LoginDialog = ({open, onClose, values, touched, errors, handleChange, hand
         error={touched[USER_DATA.EMAIL] && !!errors[USER_DATA.EMAIL]}
         InputLabelProps={{
           shrink: true
-        }}/>
+        }}
+      />
 
       <TextField
         label='Password'
@@ -112,11 +122,13 @@ const LoginDialog = ({open, onClose, values, touched, errors, handleChange, hand
         error={touched[USER_DATA.PASSWORD] && !!errors[USER_DATA.PASSWORD]}
         InputLabelProps={{
           shrink: true
-        }}/>
+        }}
+      />
 
       {showLog()}
 
     </DialogContent>
+
     <DialogActions>
       <Button
         onClick={onClose}
